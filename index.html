@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triple H Delivery | Nashville's Helping Hand</title>
+    <meta name="description" content="Triple H Delivery — Nashville's trusted local delivery, package pickup, and home repair service. Solo-operated by Julian Hernandez. Get a free quote today.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --crimson:       #C41230;
+            --crimson-dark:  #9B0E26;
+            --crimson-light: #E8142F;
+            --charcoal:      #2B2B2B;
+            --charcoal-dark: #111111;
+            --charcoal-mid:  #1E1E1E;
+            --white:         #FFFFFF;
+            --off-white:     #F7F6F4;
+            --light-gray:    #E8E8E8;
+            --mid-gray:      #888888;
+            --font: 'Inter', system-ui, -apple-system, sans-serif;
+            --radius:    8px;
+            --radius-lg: 16px;
+            --shadow:    0 4px 20px rgba(0,0,0,0.07);
+            --shadow-md: 0 8px 40px rgba(0,0,0,0.13);
+            --ease: 0.25s ease;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font);
+            color: var(--charcoal);
+            background: var(--white);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── NAV ─────────────────────────────────────── */
+        header {
+            position: fixed;
+            inset: 0 0 auto 0;
+            z-index: 200;
+            background: var(--charcoal-dark);
+            border-bottom: 3px solid var(--crimson);
+            height: 70px;
+            padding: 0 clamp(1.25rem, 5vw, 3rem);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-logo {
+            height: 56px;
+            width: auto;
+            display: block;
+            filter: drop-shadow(0 0 6px rgba(196,18,48,0.3));
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            transition: color var(--ease);
+        }
+        nav a:hover { color: var(--white); }
+
+        .nav-cta {
+            color: var(--white) !important;
+            background: var(--crimson);
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--radius);
+            font-weight: 700 !important;
+            transition: background var(--ease) !important;
+        }
+        .nav-cta:hover { background: var(--crimson-dark) !important; }
+
+        /* ─── HERO ────────────────────────────────────── */
+        #hero {
+            padding-top: 70px;
+            min-height: 100svh;
+            background: var(--charcoal-dark);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-glow {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 60% 60% at 15% 55%, rgba(196,18,48,.14) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 85% 20%, rgba(196,18,48,.08) 0%, transparent 60%);
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 5rem clamp(1.5rem, 5vw, 3rem);
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(196,18,48,.15);
+            border: 1px solid rgba(196,18,48,.4);
+            color: #FF8090;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.35rem 0.85rem;
+            border-radius: 100px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-pill-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #FF8090;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+        }
+
+        .hero-h1 {
+            font-size: clamp(2.6rem, 5vw, 4.2rem);
+            font-weight: 900;
+            line-height: 1.06;
+            letter-spacing: -0.025em;
+            color: var(--white);
+            margin-bottom: 1.4rem;
+        }
+
+        .hero-h1 em {
+            font-style: normal;
+            color: var(--crimson);
+        }
+
+        .hero-sub {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,.6);
+            line-height: 1.75;
+            max-width: 460px;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.75rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border-radius: var(--radius);
+            font-size: 0.98rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            transition: background var(--ease), transform var(--ease), border-color var(--ease);
+        }
+        .btn:hover { transform: translateY(-2px); }
+
+        .btn-red  { background: var(--crimson); color: var(--white); }
+        .btn-red:hover  { background: var(--crimson-dark); }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255,255,255,.22);
+        }
+        .btn-ghost:hover { border-color: rgba(255,255,255,.55); }
+
+        .hero-trust {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: rgba(255,255,255,.45);
+        }
+        .trust-badge svg { color: var(--crimson); flex-shrink: 0; }
+
+        /* logo orb */
+        .hero-orb-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-orb {
+            position: relative;
+            width: 380px;
+            height: 380px;
+        }
+
+        .hero-orb-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, var(--crimson) 0%, transparent 35%, var(--crimson) 100%);
+            opacity: .25;
+            animation: spin 9s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .hero-orb-inner {
+            position: absolute;
+            inset: 3px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.07);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-orb-inner img {
+            width: 78%;
+            height: 78%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 16px rgba(196,18,48,0.45));
+        }
+
+        /* ─── SECTION HELPERS ─────────────────────────── */
+        .section-tag {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--crimson);
+            margin-bottom: 0.65rem;
+        }
+
+        .section-h2 {
+            font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+            font-weight: 800;
+            line-height: 1.12;
+            letter-spacing: -0.02em;
+            color: var(--charcoal-dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-lead {
+            font-size: 1.05rem;
+            color: var(--mid-gray);
+            line-height: 1.75;
+        }
+
+        /* ─── SERVICES ────────────────────────────────── */
+        #services {
+            padding: 6rem clamp(1.5rem, 5vw, 3rem);
+            background: var(--off-white);
+        }
+
+        .services-header {
+            text-align: center;
+            max-width: 560px;
+            margin: 0 auto 3.5rem;
+        }
+
+        .services-header .section-h2 { color: var(--charcoal-dark); }
+
+        .cards {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 2.25rem 2rem;
+            box-shadow: var(--shadow);
+            border: 1.5px solid transparent;
+            position: relative;
+            overflow: hidden;
+            transition: transform var(--ease), box-shadow var(--ease), border-color var(--ease);
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--crimson);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--ease);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(196,18,48,.12);
+        }
+        .card:hover::after { transform: scaleX(1); }
+
+        .card-icon {
+            width: 56px; height: 56px;
+            background: rgba(196,18,48,.08);
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.4rem;
+        }
+        .card-icon svg { width: 28px; height: 28px; color: var(--crimson); }
+
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--charcoal-dark);
+            margin-bottom: 0.65rem;
+        }
+
+        .card p {
+            font-size: 0.93rem;
+            color: var(--mid-gray);
+            line-height: 1.7;
+            margin-bottom: 1.4rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            font-size: 0.88rem;
+            color: var(--charcoal);
+            line-height: 1.4;
+        }
+
+        .check {
+            flex-shrink: 0;
+            width: 18px; height: 18px;
+            background: var(--crimson);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+        }
+        .check svg { width: 10px; height: 10px; color: white; }
+
+        /* ─── ABOUT ───────────────────────────────────── */
+        #about {
+            padding: 6rem clamp(1.5rem, 5vw, 3rem);
+            background: var(--charcoal-dark);
+        }
+
+        .about-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .about-card {
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .about-card img {
+            width: 220px;
+            height: 220px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 12px rgba(196,18,48,0.35));
+        }
+
+        .stats-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.85rem;
+        }
+
+        .stat {
+            background: rgba(196,18,48,.1);
+            border: 1px solid rgba(196,18,48,.2);
+            border-radius: var(--radius);
+            padding: 1rem 0.85rem;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: var(--crimson);
+            line-height: 1;
+        }
+
+        .stat-lbl {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,.45);
+            font-weight: 500;
+            margin-top: 0.3rem;
+            line-height: 1.3;
+        }
+
+        .about-text .section-h2 { color: var(--white); }
+
+        .about-body {
+            font-size: 1.02rem;
+            color: rgba(255,255,255,.6);
+            line-height: 1.8;
+            margin-bottom: 1.25rem;
+        }
+
+        .about-points {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .point {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .point-icon {
+            width: 40px; height: 40px;
+            min-width: 40px;
+            background: rgba(196,18,48,.15);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .point-icon svg { width: 18px; height: 18px; color: var(--crimson); }
+
+        .point h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.2rem;
+        }
+
+        .point p {
+            font-size: 0.86rem;
+            color: rgba(255,255,255,.45);
+            line-height: 1.5;
+        }
+
+        /* ─── CONTACT ─────────────────────────────────── */
+        #contact {
+            padding: 6rem clamp(1.5rem, 5vw, 3rem);
+            background: var(--off-white);
+        }
+
+        .contact-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+        }
+
+        .ci {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .ci-icon {
+            width: 44px; height: 44px; min-width: 44px;
+            background: var(--crimson);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ci-icon svg { width: 20px; height: 20px; color: white; }
+
+        .ci-text label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+            margin-bottom: 0.2rem;
+        }
+
+        .ci-text a, .ci-text span {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            text-decoration: none;
+        }
+        .ci-text a:hover { color: var(--crimson); }
+
+        /* form */
+        .quote-form {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .quote-form h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--charcoal-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .fg { margin-bottom: 1.1rem; }
+
+        .fg label {
+            display: block;
+            font-size: 0.83rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 0.4rem;
+        }
+
+        .fg input, .fg select, .fg textarea {
+            width: 100%;
+            padding: 0.72rem 1rem;
+            border: 1.5px solid var(--light-gray);
+            border-radius: var(--radius);
+            font-family: var(--font);
+            font-size: 0.93rem;
+            color: var(--charcoal);
+            background: var(--white);
+            outline: none;
+            transition: border-color var(--ease);
+        }
+        .fg input:focus, .fg select:focus, .fg textarea:focus {
+            border-color: var(--crimson);
+        }
+        .fg textarea { resize: vertical; min-height: 96px; }
+
+        .fg-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--crimson);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius);
+            font-family: var(--font);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background var(--ease), transform var(--ease);
+        }
+        .form-btn:hover { background: var(--crimson-dark); transform: translateY(-1px); }
+
+        /* ─── FOOTER ──────────────────────────────────── */
+        footer {
+            background: var(--charcoal-dark);
+            border-top: 3px solid var(--crimson);
+            padding: 3.5rem clamp(1.5rem, 5vw, 3rem) 2rem;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.8fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-brand img {
+            height: 64px;
+            margin-bottom: 1rem;
+            display: block;
+            filter: drop-shadow(0 0 6px rgba(196,18,48,0.25));
+        }
+
+        .footer-brand p {
+            font-size: 0.88rem;
+            color: rgba(255,255,255,.4);
+            line-height: 1.75;
+            max-width: 300px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: var(--crimson);
+            margin-bottom: 1rem;
+        }
+
+        .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+
+        .footer-col ul a {
+            font-size: 0.88rem;
+            color: rgba(255,255,255,.45);
+            text-decoration: none;
+            transition: color var(--ease);
+        }
+        .footer-col ul a:hover { color: var(--white); }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255,255,255,.07);
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p { font-size: 0.79rem; color: rgba(255,255,255,.28); }
+
+        .socials { display: flex; gap: 0.6rem; }
+
+        .social {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,.07);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background var(--ease);
+        }
+        .social:hover { background: var(--crimson); }
+        .social svg { width: 16px; height: 16px; color: white; }
+
+        /* ─── RESPONSIVE ──────────────────────────────── */
+        @media (max-width: 960px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-sub { max-width: 100%; }
+            .hero-btns { justify-content: center; }
+            .hero-trust { justify-content: center; }
+            .hero-orb-wrap { order: -1; }
+            .hero-orb { width: 260px; height: 260px; }
+
+            .cards { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .contact-grid { grid-template-columns: 1fr; }
+
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .footer-brand { grid-column: 1 / -1; }
+        }
+
+        @media (max-width: 600px) {
+            nav ul li:not(:last-child) { display: none; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .fg-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header id="site-header">
+    <a href="#hero">
+        <img src="brand_assets/Triple H Delivery Logo.png" alt="Triple H Delivery LLC" class="nav-logo">
+    </a>
+    <nav>
+        <ul>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-inner">
+        <div class="hero-text">
+            <div class="hero-pill">
+                <span class="hero-pill-dot"></span>
+                Nashville's Helping Hand
+            </div>
+            <h1 class="hero-h1">
+                When You Need It Done <em>Right</em> — I Show Up.
+            </h1>
+            <p class="hero-sub">
+                Local deliveries, package pickups, and home repair handled by one trusted face in Nashville, TN. No runaround, no strangers, no surprises.
+            </p>
+            <div class="hero-btns">
+                <a href="#contact" class="btn btn-red">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                    </svg>
+                    Get a Free Quote
+                </a>
+                <a href="#services" class="btn btn-ghost">
+                    See What I Do
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="hero-trust">
+                <span class="trust-badge">
+                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Serving Nashville, TN
+                </span>
+                <span class="trust-badge">
+                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                    Locally Owned &amp; Operated
+                </span>
+                <span class="trust-badge">
+                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Upfront Pricing
+                </span>
+            </div>
+        </div>
+
+        <div class="hero-orb-wrap">
+            <div class="hero-orb">
+                <div class="hero-orb-ring"></div>
+                <div class="hero-orb-inner">
+                    <img src="brand_assets/Triple H Delivery Logo.png" alt="Hernie's Helping Hand — Triple H Delivery">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════ SERVICES ═══════════ -->
+<section id="services">
+    <div class="services-header">
+        <p class="section-tag">What I Offer</p>
+        <h2 class="section-h2">Three Services, One Reliable Name</h2>
+        <p class="section-lead">From curb to door and everywhere in between — I handle the jobs that need a steady pair of hands.</p>
+    </div>
+
+    <div class="cards">
+
+        <!-- Delivery -->
+        <div class="card">
+            <div class="card-icon">
+                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                    <rect x="1" y="3" width="15" height="13" rx="1"/>
+                    <path d="M16 8h4l3 3v5h-7V8z"/>
+                    <circle cx="5.5" cy="18.5" r="1.5"/>
+                    <circle cx="18.5" cy="18.5" r="1.5"/>
+                </svg>
+            </div>
+            <h3>Local Deliveries</h3>
+            <p>Need something moved across town? I deliver quickly, carefully, and without the corporate runaround.</p>
+            <ul class="feature-list">
+                <li>
+                    <span class="check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    Same-day delivery available
+                </li>
+                <li>
+                    <span class="check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    Furniture &amp; large item transport
+                </li>
+                <li>
+                    <span class="check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    Grocery &amp; essential runs
+                </li>
+                <li>
+                    <span class="check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    Business &amp; residential delivery
+                </li>
+            </ul>
+        </div>
+
+        <!-- Package Pickups -->
+        <div class="card">
+            <div class="card-icon">
+                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                    <line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+            </div>
+            <h3>Package Pickups</h3>
+            <p>Can't make it to the store or post office? I'll pick it up and get it straight to you. Simple as that.</p>
+            <ul class="feature-list">
+                <li>
+                    <span class="check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    Retail &amp; store pickups
+                </li>
+                <li>
+                    <span class="check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    Post office &amp; mail retrieval
+                </li>
+                <li>
+                    <span class="check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    Marketplace &amp; Facebook items
+                </li>
+                <li>
+                    <span class="check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    Scheduled recurring pickups
+                </li>
+            </ul>
+        </div>
+
+        <!-- Home Repair -->
+        <div class="card">
+            <div class="card-icon">
+                <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </div>
+            <h3>Home Repair</h3>
+            <p>Small fixes, odd jobs, or handyman work — I take care of your home like it's my own. No job too small.</p>
+            <ul class="feature-list">
+                <li>
+                    <span class="check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    General handyman tasks
+                </li>
+                <li>
+                    <span class="check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    Drywall patching &amp; painting
+                </li>
+                <li>
+                    <span class="check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    Furniture assembly
+                </li>
+                <li>
+                    <span class="check">
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </span>
+                    Minor fixture &amp; appliance installs
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ═══════════ ABOUT ═══════════ -->
+<section id="about">
+    <div class="about-grid">
+
+        <div class="about-card">
+            <img src="brand_assets/Triple H Delivery Logo.png" alt="Hernie's Helping Hand">
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-num">100%</div>
+                    <div class="stat-lbl">Local &amp; Nashville-based</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">1-on-1</div>
+                    <div class="stat-lbl">Personal service every time</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">3</div>
+                    <div class="stat-lbl">Core services offered</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">Same</div>
+                    <div class="stat-lbl">Day service available</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-text">
+            <p class="section-tag">About Triple H</p>
+            <h2 class="section-h2" style="color:var(--white)">You Always Know Who's Showing Up</h2>
+            <p class="about-body">
+                I'm Julian — the owner, operator, and the one who shows up every time you book a job. No subcontractors, no strangers, no fine print. Just a hardworking Nashville local who takes pride in getting things done right.
+            </p>
+            <p class="about-body">
+                Triple H Delivery — Hernie's Helping Hand — was built on a simple idea: people deserve reliable help they can actually trust. Whether it's a delivery across town, a pickup you don't have time for, or a repair that's been on your list too long, I've got it covered.
+            </p>
+            <div class="about-points">
+                <div class="point">
+                    <div class="point-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Rooted in Nashville</h4>
+                        <p>I know the neighborhoods, the streets, and the people. This is home.</p>
+                    </div>
+                </div>
+                <div class="point">
+                    <div class="point-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Reliable Every Time</h4>
+                        <p>When I say I'll be there, I'm there. No flaking, no last-minute excuses.</p>
+                    </div>
+                </div>
+                <div class="point">
+                    <div class="point-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Upfront &amp; Fair Pricing</h4>
+                        <p>You'll always know what you're paying before I touch a single thing.</p>
+                    </div>
+                </div>
+            </div>
+            <a href="#contact" class="btn btn-red">Work With Me</a>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ═══════════ CONTACT ═══════════ -->
+<section id="contact">
+    <div class="contact-wrap">
+        <div class="contact-header">
+            <p class="section-tag">Get in Touch</p>
+            <h2 class="section-h2">Let's Get It Done</h2>
+            <p class="section-lead">Tell me what you need — I'll get back to you fast with a straight answer and a fair price.</p>
+        </div>
+
+        <div class="contact-grid">
+            <div class="contact-info">
+
+                <div class="ci">
+                    <div class="ci-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                    </div>
+                    <div class="ci-text">
+                        <label>Phone / Text</label>
+                        <a href="tel:+16155550000">(615) 555-0000</a>
+                    </div>
+                </div>
+
+                <div class="ci">
+                    <div class="ci-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div class="ci-text">
+                        <label>Email</label>
+                        <a href="mailto:julian.hernandez@triplehdelivery.com">julian.hernandez@triplehdelivery.com</a>
+                    </div>
+                </div>
+
+                <div class="ci">
+                    <div class="ci-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <div class="ci-text">
+                        <label>Service Area</label>
+                        <span>Nashville, TN &amp; Surrounding Areas</span>
+                    </div>
+                </div>
+
+                <div class="ci">
+                    <div class="ci-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div class="ci-text">
+                        <label>Hours</label>
+                        <span>Mon – Sat &nbsp;7am – 7pm</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <form class="quote-form" id="quote-form">
+                <h3>Request a Free Quote</h3>
+                <div class="fg-row">
+                    <div class="fg">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="Jane Smith" required>
+                    </div>
+                    <div class="fg">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="(615) 000-0000">
+                    </div>
+                </div>
+                <div class="fg">
+                    <label for="service">Service Needed</label>
+                    <select id="service" name="service" required>
+                        <option value="" disabled selected>Select a service…</option>
+                        <option value="delivery">Local Delivery</option>
+                        <option value="pickup">Package Pickup</option>
+                        <option value="repair">Home Repair</option>
+                        <option value="other">Other / Not Sure</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <label for="address">Your Address or Zip Code</label>
+                    <input type="text" id="address" name="address" placeholder="Nashville, TN 37201">
+                </div>
+                <div class="fg">
+                    <label for="message">Tell Me About the Job</label>
+                    <textarea id="message" name="message" placeholder="What do you need done? Any details on size, timing, or location help a lot." required></textarea>
+                </div>
+                <button type="submit" class="form-btn" id="submit-btn">Send My Quote Request →</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <img src="brand_assets/Triple H Delivery Logo.png" alt="Triple H Delivery LLC">
+            <p>Hernie's Helping Hand — Nashville's trusted solo delivery and handyman service. Local, reliable, and always on time.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Services</h4>
+            <ul>
+                <li><a href="#services">Local Deliveries</a></li>
+                <li><a href="#services">Package Pickups</a></li>
+                <li><a href="#services">Home Repair</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Get a Quote</a></li>
+                <li><a href="mailto:julian.hernandez@triplehdelivery.com">Email Us</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 Triple H Delivery, LLC — Hernie's Helping Hand. Nashville, TN. All rights reserved.</p>
+        <div class="socials">
+            <a href="#" class="social" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                </svg>
+            </a>
+            <a href="#" class="social" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                    <circle cx="12" cy="12" r="4"/>
+                    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</footer>
+
+
+<script>
+    // Hide nav on scroll down, reveal on scroll up
+    let lastY = 0;
+    const hdr = document.getElementById('site-header');
+    window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        hdr.style.transform = (y > lastY && y > 80) ? 'translateY(-100%)' : 'translateY(0)';
+        hdr.style.transition = 'transform 0.3s ease';
+        lastY = y;
+    }, { passive: true });
+
+    // Simple form feedback
+    document.getElementById('quote-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submit-btn');
+        btn.textContent = "Sent! I'll be in touch soon.";
+        btn.style.background = '#16a34a';
+        btn.disabled = true;
+    });
+</script>
+
+</body>
+</html>
