@@ -1207,13 +1207,33 @@
         lastY = y;
     }, { passive: true });
 
-    // Simple form feedback
-    document.getElementById('quote-form').addEventListener('submit', function(e) {
+    document.getElementById('quote-form').addEventListener('submit', async function(e) {
         e.preventDefault();
         const btn = document.getElementById('submit-btn');
-        btn.textContent = "Sent! I'll be in touch soon.";
-        btn.style.background = '#16a34a';
+        btn.textContent = 'Sending…';
         btn.disabled = true;
+
+        const data = {
+            name:    document.getElementById('name').value,
+            phone:   document.getElementById('phone').value,
+            service: document.getElementById('service').value,
+            address: document.getElementById('address').value,
+            message: document.getElementById('message').value
+        };
+
+        try {
+            await fetch('https://script.google.com/a/macros/triplehdelivery.com/s/AKfycbzKA7g-saIbaeR3sQ3ZMZTHuO4ryl114HMnPO8P17aJw6Gp6mN_wCQZkm8w3BuMneEV/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(data)
+            });
+            btn.textContent = "Sent! I'll be in touch soon.";
+            btn.style.background = '#16a34a';
+        } catch (err) {
+            btn.textContent = 'Something went wrong — please try again.';
+            btn.style.background = '#dc2626';
+            btn.disabled = false;
+        }
     });
 </script>
 
