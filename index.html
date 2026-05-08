@@ -1128,6 +1128,10 @@
                     </div>
                 </div>
                 <div class="fg">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="jane@example.com" required>
+                </div>
+                <div class="fg">
                     <label for="service">Service Needed</label>
                     <select id="service" name="service" required>
                         <option value="" disabled selected>Select a service…</option>
@@ -1137,13 +1141,19 @@
                         <option value="other">Other / Not Sure</option>
                     </select>
                 </div>
-                <div class="fg">
-                    <label for="address">Your Address or Zip Code</label>
-                    <input type="text" id="address" name="address" placeholder="Nashville, TN 37201">
+                <div class="fg-row">
+                    <div class="fg">
+                        <label for="address">Pickup Address or Zip Code</label>
+                        <input type="text" id="address" name="address" placeholder="Nashville, TN 37201">
+                    </div>
+                    <div class="fg">
+                        <label for="destination">Destination Address or Zip Code</label>
+                        <input type="text" id="destination" name="destination" placeholder="Brentwood, TN 37027">
+                    </div>
                 </div>
                 <div class="fg">
                     <label for="message">Tell Me About the Job</label>
-                    <textarea id="message" name="message" placeholder="What do you need done? Any details on size, timing, or location help a lot." required></textarea>
+                    <textarea id="message" name="message" placeholder="What do you need moved or delivered? Include number of rooms, large items (piano, appliances, etc.), stairs, or anything else that helps." required></textarea>
                 </div>
                 <button type="submit" class="form-btn" id="submit-btn">Send My Quote Request →</button>
             </form>
@@ -1213,22 +1223,27 @@
         btn.textContent = 'Sending…';
         btn.disabled = true;
 
+        const SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
+
         const data = {
-            name:    document.getElementById('name').value,
-            phone:   document.getElementById('phone').value,
-            service: document.getElementById('service').value,
-            address: document.getElementById('address').value,
-            message: document.getElementById('message').value
+            name:        document.getElementById('name').value,
+            phone:       document.getElementById('phone').value,
+            email:       document.getElementById('email').value,
+            service:     document.getElementById('service').value,
+            address:     document.getElementById('address').value,
+            destination: document.getElementById('destination').value,
+            message:     document.getElementById('message').value
         };
 
         try {
-            await fetch('https://script.google.com/macros/s/AKfycbzKA7g-saIbaeR3sQ3ZMZTHuO4ryl114HMnPO8P17aJw6Gp6mN_wCQZkm8w3BuMneEV/exec', {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(data)
-            });
-            btn.textContent = "Sent! I'll be in touch soon.";
-            btn.style.background = '#16a34a';
+            const res  = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
+            const json = await res.json();
+            if (json.success) {
+                btn.textContent = "Sent! I'll be in touch soon.";
+                btn.style.background = '#16a34a';
+            } else {
+                throw new Error(json.error || 'Unknown error');
+            }
         } catch (err) {
             btn.textContent = 'Something went wrong — please try again.';
             btn.style.background = '#dc2626';
