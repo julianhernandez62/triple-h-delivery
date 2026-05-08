@@ -208,18 +208,8 @@ function sendQuoteEmail(job, quote) {
   // Route summary
   const route = [job.address, job.destination].filter(Boolean).join(' → ');
 
-  // Convert AI quote text into clean HTML lines
-  const quoteLines = quote.split('\n').map(line => {
-    const t = line.trim();
-    if (!t || t === '---') return '<div style="margin:5px 0;"></div>';
-    if (/^(ESTIMATE SUMMARY|BREAKDOWN|NOTES)/.test(t))
-      return `<div style="font-weight:700;color:#111;margin:12px 0 4px;letter-spacing:0.3px;">${t}</div>`;
-    if (t.startsWith('•') || t.startsWith('-'))
-      return `<div style="margin:2px 0 2px 8px;color:#333;">${t.replace(/•/, '&bull;')}</div>`;
-    if (t.startsWith('|'))
-      return `<div style="font-family:monospace;font-size:11px;color:#555;">${t}</div>`;
-    return `<div style="color:#444;">${t}</div>`;
-  }).join('');
+  // Parse AI quote into structured HTML sections
+  const quoteLines = formatQuoteHtml(quote);
 
   const subject = `New Quote Request — ${job.name} | Triple H Delivery [${quoteNumber}]`;
 
@@ -377,6 +367,94 @@ function sendQuoteEmail(job, quote) {
 // ─────────────────────────────────────────────────────────────────────────────
 //  Helpers
 // ─────────────────────────────────────────────────────────────────────────────
+
+// Converts the AI quote text into structured invoice-quality HTML.
+function formatQuoteHtml(quote) {
+  // Split into named sections
+  const sections = { summary: [], breakdown: [], notes: [] };
+  let current = null;
+  quote.split('\n').forEach(function(line) {
+    const t = line.trim();
+    if (t === 'ESTIMATE SUMMARY') { current = 'summary';   return; }
+    if (t === 'BREAKDOWN')        { current = 'breakdown'; return; }
+    if (t === 'NOTES')            { current = 'notes';     return; }
+    if (current && t)             { sections[current].push(t); }
+  });
+
+  const labelStyle  = 'font-size:10px;font-weight:700;color:#aaaaaa;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:10px;';
+  let html = '';
+
+  // ── ESTIMATE SUMMARY ─────────────────────────────
+  if (sections.summary.length) {
+    html += '<div style="margin-bottom:22px;">';
+    html += '<div style="' + labelStyle + '">Estimate Summary</div>';
+    html += '<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px;">';
+    sections.summary.forEach(function(line) {
+      const m = line.match(/^[•\-]\s*(.+?):\s*(.+)$/);
+      if (!m) return;
+      const isTotal = /estimated total/i.test(m[1]);
+      html += '<tr>';
+      html += '<td style="padding:8px 14px;border-bottom:1px solid #f0f0f0;color:#777777;width:48%;">' + m[1] + '</td>';
+      html += '<td style="padding:8px 14px;border-bottom:1px solid #f0f0f0;' + (isTotal ? 'font-weight:700;font-size:14px;color:#111111;' : 'font-weight:600;color:#222222;') + '">' + m[2] + '</td>';
+      html += '</tr>';
+    });
+    html += '</table></div>';
+  }
+
+  // ── BREAKDOWN ────────────────────────────────────
+  const tableRows = sections.breakdown.filter(function(l) { return l.startsWith('|'); });
+  const extraLines = sections.breakdown.filter(function(l) { return !l.startsWith('|') && l !== '---'; });
+
+  if (tableRows.length >= 2) {
+    html += '<div style="margin-bottom:22px;">';
+    html += '<div style="' + labelStyle + '">Breakdown</div>';
+    html += '<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:12px;">';
+    let headerDone = false;
+    tableRows.forEach(function(row) {
+      if (/^\|[\s\-|]+\|$/.test(row)) return; // separator
+      const cells = row.split('|').filter(function(c) { return c.trim(); }).map(function(c) {
+        return c.trim().replace(/\*\*/g, '');
+      });
+      if (!headerDone) {
+        html += '<thead><tr style="background:#f5f5f5;">';
+        cells.forEach(function(c, i) {
+          html += '<th style="padding:9px 14px;border:1px solid #e4e4e4;font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#555555;text-align:' + (i === 0 ? 'left' : 'right') + ';">' + c + '</th>';
+        });
+        html += '</tr></thead><tbody>';
+        headerDone = true;
+      } else {
+        const isTotalRow = /subtotal|total/i.test(cells[0] || '');
+        const rowStyle   = isTotalRow ? 'background:#f9f9f9;' : '';
+        html += '<tr style="' + rowStyle + '">';
+        cells.forEach(function(c, i) {
+          const cellStyle = 'padding:8px 14px;border-bottom:1px solid #f0f0f0;' +
+            (isTotalRow ? 'font-weight:700;' : '') +
+            (i === 0 ? 'color:#333333;' : 'text-align:right;color:#111111;');
+          html += '<td style="' + cellStyle + '">' + c + '</td>';
+        });
+        html += '</tr>';
+      }
+    });
+    html += '</tbody></table>';
+    extraLines.forEach(function(l) {
+      const clean = l.replace(/^>\s*/, '').replace(/✅\s*/g, '').trim();
+      if (clean) html += '<div style="font-size:12px;color:#555555;margin-top:8px;padding-left:2px;">' + clean + '</div>';
+    });
+    html += '</div>';
+  }
+
+  // ── NOTES ────────────────────────────────────────
+  const notesText = sections.notes.filter(function(l) { return l !== '---'; }).join(' ').trim();
+  if (notesText) {
+    html += '<div style="background:#fafafa;border-left:3px solid #C41230;padding:14px 18px;">';
+    html += '<div style="' + labelStyle + 'margin-bottom:6px;">Notes</div>';
+    html += '<div style="font-size:12px;color:#444444;line-height:1.75;">' + notesText + '</div>';
+    html += '</div>';
+  }
+
+  return html || '<div style="font-size:12px;color:#666;">' + quote + '</div>';
+}
+
 function jsonResponse(obj) {
   return ContentService
     .createTextOutput(JSON.stringify(obj))
