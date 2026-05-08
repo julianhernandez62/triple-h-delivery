@@ -1229,8 +1229,7 @@
             const res  = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
             const json = await res.json();
             if (json.success) {
-                btn.textContent = "Sent! I'll be in touch soon.";
-                btn.style.background = '#16a34a';
+                window.location.href = 'confirmation.html';
             } else {
                 throw new Error(json.error || 'Unknown error');
             }
