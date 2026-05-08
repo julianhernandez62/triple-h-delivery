@@ -185,82 +185,186 @@ function logToSheet(job, quote) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  Email — sends a formatted quote to the owner
+//  Email — sends a professional invoice-style quote to the owner
 // ─────────────────────────────────────────────────────────────────────────────
 function sendQuoteEmail(job, quote) {
-  const service     = SERVICES[job.service] || job.service;
-  const subject     = `New Quote Request — ${job.name} | Triple H Delivery`;
-  const quoteHtml   = quote.replace(/\n/g, '<br>').replace(/•/g, '&bull;');
-  const dateString  = job.submittedAt.toLocaleString('en-US', { timeZone: 'America/Chicago' });
+  const service = SERVICES[job.service] || job.service;
+  const now     = job.submittedAt;
 
-  const htmlBody = `
-<!DOCTYPE html>
-<html>
-<body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f4f4f4;">
-  <div style="max-width:620px;margin:32px auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+  // Quote number: THH-YYMMDD-HHMM
+  const pad = n => String(n).padStart(2, '0');
+  const quoteNumber = `THH-${String(now.getFullYear()).slice(-2)}${pad(now.getMonth()+1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}`;
 
-    <div style="background:#1a1a2e;padding:24px 32px;">
-      <h1 style="color:#fff;margin:0;font-size:20px;">Triple H Delivery</h1>
-      <p style="color:#aaa;margin:4px 0 0;font-size:14px;">New Quote Request</p>
-    </div>
+  // Formatted dates (Central time)
+  const fmtOpts = { timeZone: 'America/Chicago', day: '2-digit', month: '2-digit', year: 'numeric' };
+  const issueDateStr  = now.toLocaleDateString('en-US', fmtOpts);
+  const validUntil    = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+  const validUntilStr = validUntil.toLocaleDateString('en-US', fmtOpts);
 
-    <div style="padding:28px 32px;">
+  // Pull the estimate range from the AI text (e.g. "$187.50 – $337.50")
+  const rangeMatch   = quote.match(/\$([0-9,]+(?:\.[0-9]{2})?)\s*[–\-]\s*\$([0-9,]+(?:\.[0-9]{2})?)/);
+  const estimateRange = rangeMatch ? `$${rangeMatch[1]} – $${rangeMatch[2]}` : 'See details below';
 
-      <h2 style="color:#1a1a2e;margin:0 0 16px;font-size:16px;border-bottom:2px solid #f0f0f0;padding-bottom:10px;">
-        Client Information
-      </h2>
-      <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
-        <tr><td style="padding:6px 0;color:#888;width:120px;">Name</td><td style="padding:6px 0;font-weight:600;">${job.name}</td></tr>
-        <tr><td style="padding:6px 0;color:#888;">Phone</td><td style="padding:6px 0;">${job.phone || '—'}</td></tr>
-        <tr><td style="padding:6px 0;color:#888;">Email</td><td style="padding:6px 0;">${job.email || '—'}</td></tr>
-        <tr><td style="padding:6px 0;color:#888;">Service</td><td style="padding:6px 0;">${service}</td></tr>
-      </table>
+  // Route summary
+  const route = [job.address, job.destination].filter(Boolean).join(' → ');
 
-      <h2 style="color:#1a1a2e;margin:0 0 16px;font-size:16px;border-bottom:2px solid #f0f0f0;padding-bottom:10px;">
-        Job Details
-      </h2>
-      <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
-        <tr><td style="padding:6px 0;color:#888;width:120px;">Pickup</td><td style="padding:6px 0;">${job.address || '—'}</td></tr>
-        <tr><td style="padding:6px 0;color:#888;">Destination</td><td style="padding:6px 0;">${job.destination || '—'}</td></tr>
-        <tr><td style="padding:6px 0;color:#888;vertical-align:top;">Description</td><td style="padding:6px 0;">${job.message}</td></tr>
-      </table>
+  // Convert AI quote text into clean HTML lines
+  const quoteLines = quote.split('\n').map(line => {
+    const t = line.trim();
+    if (!t || t === '---') return '<div style="margin:5px 0;"></div>';
+    if (/^(ESTIMATE SUMMARY|BREAKDOWN|NOTES)/.test(t))
+      return `<div style="font-weight:700;color:#111;margin:12px 0 4px;letter-spacing:0.3px;">${t}</div>`;
+    if (t.startsWith('•') || t.startsWith('-'))
+      return `<div style="margin:2px 0 2px 8px;color:#333;">${t.replace(/•/, '&bull;')}</div>`;
+    if (t.startsWith('|'))
+      return `<div style="font-family:monospace;font-size:11px;color:#555;">${t}</div>`;
+    return `<div style="color:#444;">${t}</div>`;
+  }).join('');
 
-      <h2 style="color:#1a1a2e;margin:0 0 16px;font-size:16px;border-bottom:2px solid #f0f0f0;padding-bottom:10px;">
-        AI-Generated Quote
-      </h2>
-      <div style="background:#f8f8f8;border-left:4px solid #1a1a2e;padding:16px 20px;border-radius:0 6px 6px 0;line-height:1.7;">
-        ${quoteHtml}
-      </div>
+  const subject = `New Quote Request — ${job.name} | Triple H Delivery [${quoteNumber}]`;
 
-    </div>
+  const htmlBody = `<!DOCTYPE html>
+<html lang="en">
+<body style="margin:0;padding:0;background:#ebebeb;font-family:Arial,Helvetica,sans-serif;">
+<div style="max-width:680px;margin:36px auto;background:#ffffff;border:1px solid #cccccc;">
 
-    <div style="background:#f4f4f4;padding:16px 32px;text-align:center;">
-      <p style="color:#aaa;font-size:12px;margin:0;">Submitted ${dateString} &nbsp;|&nbsp; Triple H Delivery Quote System</p>
-    </div>
-
+  <!-- ── HEADER ─────────────────────────────────────── -->
+  <div style="padding:40px 48px 24px;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr valign="middle">
+      <td>
+        <div style="font-size:32px;font-weight:900;letter-spacing:4px;color:#111111;line-height:1;">QUOTE</div>
+      </td>
+      <td align="right">
+        <div style="font-size:17px;font-weight:900;color:#C41230;letter-spacing:0.5px;">Triple H Delivery</div>
+        <div style="font-size:11px;color:#999999;margin-top:3px;letter-spacing:0.3px;">Hernie's Helping Hand</div>
+      </td>
+    </tr></table>
   </div>
+
+  <!-- ── COMPANY INFO ───────────────────────────────── -->
+  <div style="padding:0 48px 20px;">
+    <div style="font-size:12px;color:#555555;">
+      <strong style="color:#222;">Triple H Delivery, LLC</strong>
+      &nbsp;&middot;&nbsp; Nashville, TN &amp; Surrounding Areas
+      &nbsp;&middot;&nbsp; julian.hernandez@triplehdelivery.com
+    </div>
+  </div>
+
+  <div style="border-top:1px solid #e2e2e2;margin:0 48px;"></div>
+
+  <!-- ── CLIENT + QUOTE META ───────────────────────── -->
+  <div style="padding:26px 48px;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr valign="top">
+
+      <td width="52%">
+        <div style="font-size:10px;font-weight:700;color:#aaaaaa;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:10px;">For</div>
+        <div style="font-size:14px;color:#111111;line-height:1.9;">
+          <strong>${job.name}</strong><br>
+          ${job.email}<br>
+          ${job.phone ? job.phone : ''}
+        </div>
+      </td>
+
+      <td width="48%" align="right">
+        <table cellpadding="0" cellspacing="0" style="font-size:13px;margin-left:auto;">
+          <tr>
+            <td style="color:#888888;padding:4px 20px 4px 0;white-space:nowrap;">Quote No.:</td>
+            <td align="right"><strong style="color:#111111;">${quoteNumber}</strong></td>
+          </tr>
+          <tr>
+            <td style="color:#888888;padding:4px 20px 4px 0;">Issue date:</td>
+            <td align="right"><strong style="color:#111111;">${issueDateStr}</strong></td>
+          </tr>
+          <tr>
+            <td style="color:#888888;padding:4px 20px 4px 0;">Valid until:</td>
+            <td align="right"><strong style="color:#111111;">${validUntilStr}</strong></td>
+          </tr>
+        </table>
+      </td>
+
+    </tr></table>
+  </div>
+
+  <!-- ── LINE ITEMS TABLE ──────────────────────────── -->
+  <div style="padding:0 48px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px;">
+      <thead>
+        <tr style="background:#f5f5f5;">
+          <th style="text-align:left;padding:11px 14px;border:1px solid #dedede;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#444444;">Description</th>
+          <th style="text-align:center;padding:11px 14px;border:1px solid #dedede;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#444444;width:70px;">Quantity</th>
+          <th style="text-align:right;padding:11px 14px;border:1px solid #dedede;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#444444;width:170px;">Estimate (USD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:15px 14px;border:1px solid #dedede;vertical-align:top;">
+            <div style="font-weight:700;color:#111111;margin-bottom:4px;">${service}</div>
+            ${route ? `<div style="font-size:12px;color:#777777;">${route}</div>` : ''}
+            ${job.message ? `<div style="font-size:12px;color:#888888;margin-top:5px;">${job.message.length > 130 ? job.message.slice(0,130)+'…' : job.message}</div>` : ''}
+          </td>
+          <td style="text-align:center;padding:15px 14px;border:1px solid #dedede;color:#666666;vertical-align:top;">1</td>
+          <td style="text-align:right;padding:15px 14px;border:1px solid #dedede;font-weight:700;color:#111111;vertical-align:top;">${estimateRange}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── TOTALS ─────────────────────────────────────── -->
+  <div style="padding:0 48px 28px;">
+    <table cellpadding="0" cellspacing="0" style="margin-left:auto;border-collapse:collapse;font-size:13px;min-width:290px;">
+      <tr>
+        <td style="padding:10px 16px;border:1px solid #dedede;border-top:none;color:#555555;font-weight:600;white-space:nowrap;">SUBTOTAL:</td>
+        <td style="text-align:right;padding:10px 16px;border:1px solid #dedede;border-top:none;border-left:none;min-width:130px;">${estimateRange}</td>
+      </tr>
+      <tr>
+        <td style="padding:11px 16px;border:1px solid #dedede;border-top:none;font-weight:700;color:#111111;">TOTAL (USD):</td>
+        <td style="text-align:right;padding:11px 16px;border:1px solid #dedede;border-top:none;border-left:none;font-weight:700;color:#111111;">${estimateRange}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ── AI QUOTE BREAKDOWN ────────────────────────── -->
+  <div style="padding:0 48px 36px;">
+    <div style="font-size:10px;font-weight:700;color:#aaaaaa;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:10px;">Quote Details</div>
+    <div style="background:#f8f8f8;border:1px solid #e8e8e8;padding:18px 20px;font-size:12px;line-height:1.85;color:#444444;">
+      ${quoteLines}
+    </div>
+  </div>
+
+  <!-- ── FOOTER ─────────────────────────────────────── -->
+  <div style="border-top:1px solid #e2e2e2;padding:15px 48px;background:#f7f7f7;">
+    <div style="font-size:11px;color:#888888;">
+      <strong style="color:#444444;">Triple H Delivery, LLC</strong>
+      &nbsp;&middot;&nbsp; Nashville, TN &amp; Surrounding Areas
+      &nbsp;&nbsp;<strong style="color:#444444;">Email:</strong> julian.hernandez@triplehdelivery.com
+    </div>
+  </div>
+
+</div>
 </body>
 </html>`;
 
   const plainBody = [
-    `NEW QUOTE REQUEST — Triple H Delivery`,
-    `Submitted: ${dateString}`,
+    `QUOTE — Triple H Delivery`,
+    `Quote No.: ${quoteNumber}  |  Issue Date: ${issueDateStr}  |  Valid Until: ${validUntilStr}`,
     ``,
-    `CLIENT`,
-    `  Name:        ${job.name}`,
-    `  Phone:       ${job.phone || '—'}`,
-    `  Email:       ${job.email || '—'}`,
-    `  Service:     ${service}`,
+    `FOR`,
+    `  ${job.name}`,
+    `  ${job.email}`,
+    `  ${job.phone || ''}`,
     ``,
-    `JOB`,
-    `  Pickup:      ${job.address || '—'}`,
-    `  Destination: ${job.destination || '—'}`,
-    `  Details:     ${job.message}`,
+    `SERVICE:  ${service}`,
+    route ? `ROUTE:    ${route}` : '',
     ``,
-    `AI-GENERATED QUOTE`,
-    `─────────────────────────────────`,
+    `ESTIMATE: ${estimateRange}`,
+    ``,
+    `── QUOTE DETAILS ──────────────────────────────`,
     quote,
-  ].join('\n');
+    `───────────────────────────────────────────────`,
+    ``,
+    `Triple H Delivery, LLC — Nashville, TN`,
+    `julian.hernandez@triplehdelivery.com`,
+  ].filter(l => l !== null).join('\n');
 
   MailApp.sendEmail({
     to:       OWNER_EMAIL,
