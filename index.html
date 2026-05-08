@@ -1144,6 +1144,15 @@
                     </div>
                 </div>
                 <div class="fg">
+                    <label for="urgency">When Do You Need This Done?</label>
+                    <select id="urgency" name="urgency" required>
+                        <option value="" disabled selected>Select a timeframe…</option>
+                        <option value="same_day">Same day (+$25 rush fee)</option>
+                        <option value="within_3_days">Within 3 days (+$15 priority fee)</option>
+                        <option value="future">More than 3 days out (no extra charge)</option>
+                    </select>
+                </div>
+                <div class="fg">
                     <label for="message">Tell Me About the Job</label>
                     <textarea id="message" name="message" placeholder="What do you need moved or delivered? Include number of rooms, large items (piano, appliances, etc.), stairs, or anything else that helps." required></textarea>
                 </div>
@@ -1224,6 +1233,7 @@
             service:     document.getElementById('service').value,
             address:     document.getElementById('address').value,
             destination: document.getElementById('destination').value,
+            urgency:     document.getElementById('urgency').value,
             message:     document.getElementById('message').value
         };
 
