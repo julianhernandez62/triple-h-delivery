@@ -85,7 +85,7 @@ All pricing rates are in `Code.gs` at the top in the `PRICING_CONFIG` object.
 Change any value there, save, and redeploy (Deploy → Manage deployments → Edit → Version: New version → Deploy).
 
 ```
-minimumCharge: 150       ← Minimum job charge ($)
+minimumCharge: 75        ← Minimum job charge ($)
 baseHourlyRate: 75       ← $/hr for 2-helper crew
 extraHelperRate: 40      ← $/hr per extra helper
 mileageRate: 2.50        ← $/mile for trips over 10 miles

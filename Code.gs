@@ -11,7 +11,7 @@ const OWNER_EMAIL = 'julian.hernandez@triplehdelivery.com';
 
 // ── Adjust these rates to match your actual pricing ──────────────────────────
 const PRICING_CONFIG = {
-  minimumCharge: 150,          // Minimum job charge ($)
+  minimumCharge: 75,           // Minimum job charge ($)
   baseHourlyRate: 75,          // $/hr for standard 2-helper crew
   extraHelperRate: 40,         // $/hr per additional helper beyond 2
   mileageRate: 2.50,           // $/mile (one-way) for trips over 10 miles
