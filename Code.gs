@@ -12,10 +12,14 @@ const OWNER_EMAIL = 'julian.hernandez@triplehdelivery.com';
 // ── Adjust these rates to match your actual pricing ──────────────────────────
 const PRICING_CONFIG = {
   minimumCharge: 75,           // Minimum job charge ($)
-  baseLaborFee: 25,            // Flat base labor fee (solo, no hourly rate)
+  // Labor fee scales with item weight — solo operator
+  laborLight: 25,              // Light load: small boxes, bags, few small items (under ~100 lbs total)
+  laborMedium: 50,             // Medium load: small furniture, TVs, mixed boxes (~100–300 lbs)
+  laborHeavy: 75,              // Heavy load: large furniture, appliances, many items (~300–600 lbs)
+  laborVeryHeavy: 100,         // Very heavy: multiple large pieces, full room moves (600+ lbs)
   mileageRate: 2.50,           // $/mile (one-way) for trips over 10 miles
   mileageFreeRadius: 10,       // Miles before mileage fee kicks in
-  heavyItemSurcharge: 75,      // Per truly heavy/specialty item (piano, safe, gun safe, hot tub)
+  heavyItemSurcharge: 75,      // Per extreme item (piano, gun safe, hot tub)
   stairsSurcharge: 25,         // Per flight of stairs beyond ground floor
   helperRate: 40,              // $/hr per helper — ONLY if customer requests extra help
 };
@@ -99,9 +103,13 @@ function buildSystemPrompt() {
 
 PRICING RULES:
 - Minimum charge: $${p.minimumCharge}
-- Base labor fee: $${p.baseLaborFee} flat (covers Julian's time for standard jobs — solo operator)
+- Labor fee (scales with weight — pick ONE tier based on the job):
+    • Light ($${p.laborLight}): small boxes, bags, a few small items — total estimated weight under ~100 lbs
+    • Medium ($${p.laborMedium}): small furniture, TVs, mixed boxes — ~100–300 lbs total
+    • Heavy ($${p.laborHeavy}): large furniture, appliances, many items — ~300–600 lbs total
+    • Very Heavy ($${p.laborVeryHeavy}): multiple large pieces, full room moves — 600+ lbs total
 - Mileage: $${p.mileageRate}/mile one-way for trips over ${p.mileageFreeRadius} miles. No mileage fee within ${p.mileageFreeRadius} miles.
-- Heavy/specialty item surcharge: $${p.heavyItemSurcharge} each — ONLY for piano, gun safe, hot tub, or similarly extreme items. Do NOT apply this to TVs, appliances, or regular furniture.
+- Extreme item surcharge: $${p.heavyItemSurcharge} each — ONLY for piano, gun safe, hot tub, or similarly extreme items. Do NOT apply to TVs, appliances, or regular furniture.
 - Stairs: $${p.stairsSurcharge} per flight above ground floor
 - Extra helpers: $${p.helperRate}/hr per helper — ONLY if the customer explicitly asks for extra help. Do not assume helpers are needed.
 
