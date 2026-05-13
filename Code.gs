@@ -12,14 +12,12 @@ const OWNER_EMAIL = 'julian.hernandez@triplehdelivery.com';
 // ── Adjust these rates to match your actual pricing ──────────────────────────
 const PRICING_CONFIG = {
   minimumCharge: 75,           // Minimum job charge ($)
-  baseHourlyRate: 75,          // $/hr for standard 2-helper crew
-  extraHelperRate: 40,         // $/hr per additional helper beyond 2
+  baseLaborFee: 25,            // Flat base labor fee (solo, no hourly rate)
   mileageRate: 2.50,           // $/mile (one-way) for trips over 10 miles
   mileageFreeRadius: 10,       // Miles before mileage fee kicks in
-  heavyItemSurcharge: 75,      // Per heavy/specialty item (piano, safe, appliance)
+  heavyItemSurcharge: 75,      // Per truly heavy/specialty item (piano, safe, gun safe, hot tub)
   stairsSurcharge: 25,         // Per flight of stairs beyond ground floor
-  packingRate: 35,             // $/hr if packing service requested
-  minimumHours: 2,             // Minimum billable hours
+  helperRate: 40,              // $/hr per helper — ONLY if customer requests extra help
 };
 
 const SERVICES = {
@@ -97,35 +95,32 @@ function generateQuote(job) {
 
 function buildSystemPrompt() {
   const p = PRICING_CONFIG;
-  return `You are the quote generator for Triple H Delivery, a moving and delivery service based in Nashville, TN.
+  return `You are the quote generator for Triple H Delivery, a moving and delivery service based in Nashville, TN. Julian operates solo — he does NOT charge an hourly crew rate.
 
 PRICING RULES:
 - Minimum charge: $${p.minimumCharge}
-- Standard crew (2 helpers): $${p.baseHourlyRate}/hour — minimum ${p.minimumHours} hours
-- Extra helper (beyond 2): $${p.extraHelperRate}/hour each
-- Mileage: $${p.mileageRate}/mile one-way for trips over ${p.mileageFreeRadius} miles
-- Heavy or specialty items (piano, safe, large appliance, gun safe, hot tub): $${p.heavyItemSurcharge} surcharge each
+- Base labor fee: $${p.baseLaborFee} flat (covers Julian's time for standard jobs — solo operator)
+- Mileage: $${p.mileageRate}/mile one-way for trips over ${p.mileageFreeRadius} miles. No mileage fee within ${p.mileageFreeRadius} miles.
+- Heavy/specialty item surcharge: $${p.heavyItemSurcharge} each — ONLY for piano, gun safe, hot tub, or similarly extreme items. Do NOT apply this to TVs, appliances, or regular furniture.
 - Stairs: $${p.stairsSurcharge} per flight above ground floor
-- Packing/unpacking service: $${p.packingRate}/hour additional
+- Extra helpers: $${p.helperRate}/hr per helper — ONLY if the customer explicitly asks for extra help. Do not assume helpers are needed.
 
-CREW SIZE GUIDE:
-- Small job (1–5 items, studio, or single room): 1–2 helpers
-- Medium job (1–2 bedroom apartment or small house): 2–3 helpers
-- Large job (3+ bedroom house or many heavy items): 3–4 helpers
-- Extra-large job (4+ bedrooms, multiple stops, commercial): 4+ helpers
+IMPORTANT RULES:
+- Julian works alone by default. Never include a crew or helper charge unless the customer's message specifically asks for it.
+- Moving a TV is a standard delivery item. Do NOT add a mounting surcharge unless the customer explicitly asks for TV mounting.
+- There is no hourly furniture rate. Charge is: base labor fee + mileage (if applicable) + surcharges (only if triggered above).
 
 INSTRUCTIONS:
 Given the client's job details, produce a clear, professional quote. Structure your response exactly like this:
 
 ESTIMATE SUMMARY
-• Helpers needed: [number]
-• Estimated time: [X–Y hours]
+• Operator: Julian (solo)
 • Distance fee: [amount or "None — within free radius"]
 • Item surcharges: [list or "None"]
 • Estimated total: $[low] – $[high]
 
 BREAKDOWN
-[Show the math: labor cost, mileage, surcharges, etc.]
+[Show the math: base labor fee, mileage, surcharges, etc.]
 
 NOTES
 [1–3 short sentences: any assumptions made, what could affect the final price, or advice for the client.]
