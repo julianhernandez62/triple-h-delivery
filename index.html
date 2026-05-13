@@ -1226,13 +1226,8 @@
         };
 
         try {
-            const res  = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
-            const json = await res.json();
-            if (json.success) {
-                window.location.href = 'confirmation.html';
-            } else {
-                throw new Error(json.error || 'Unknown error');
-            }
+            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data), mode: 'no-cors' });
+            window.location.href = 'confirmation.html';
         } catch (err) {
             btn.textContent = 'Something went wrong — please try again.';
             btn.style.background = '#dc2626';
